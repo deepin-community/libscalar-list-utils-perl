@@ -1,0 +1,26 @@
+Source: libscalar-list-utils-perl
+Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Uploaders: Salvatore Bonaccorso <carnil@debian.org>
+Section: perl
+Testsuite: autopkgtest-pkg-perl
+Priority: optional
+Build-Depends: debhelper-compat (= 13),
+               perl-xs-dev,
+               perl:native
+Standards-Version: 4.6.0
+Vcs-Browser: https://salsa.debian.org/perl-team/modules/packages/libscalar-list-utils-perl
+Vcs-Git: https://salsa.debian.org/perl-team/modules/packages/libscalar-list-utils-perl.git
+Homepage: https://metacpan.org/release/Scalar-List-Utils
+Rules-Requires-Root: no
+
+Package: libscalar-list-utils-perl
+Architecture: any
+Depends: ${misc:Depends},
+         ${perl:Depends},
+         ${shlibs:Depends}
+Description: modules providing common scalar and list utility subroutines
+ List::Util is a collection of Perl modules that provide subroutines useful
+ for working with scalars and lists, which people have expressed would be nice
+ to have as a perl builtin, but where usage would not be sufficient to warrant
+ use of a keyword, and the size so small such that being individual extensions
+ would be wasteful.
