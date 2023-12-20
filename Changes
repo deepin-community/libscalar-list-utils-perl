@@ -1,3 +1,31 @@
+1.63 -- 2022-08-08
+	[BUGFIXES]
+	 * Fix off-by-one in stack handling of head() / tail() (RT143905)
+	 * Fix documentation copy-paste error about builtin::reftype
+	 * Ensure exotic_names.t will work on EBCDIC platforms
+	 * Add basic Github CI workflow
+
+1.62 -- 2022-03-17
+	[CHANGES]
+	 * Prepare for perl 5.35.10 release:
+	    + Skip the tainted tests if your perl was built without taint
+	      support
+	    + Document the existence of the `builtin::` equivalents for
+	      several Scalar::Util functions
+
+1.61 -- 2022-02-16
+	[BUGFIXES]
+	 * Fix some more signed comparison warnings (Perl5 #19429)
+
+1.60 -- 2021-10-08
+	[BUGFIXES]
+	 * Quiet some -Wsign-compare warnings by using `int` instead of `UV`
+	   (RT136985)
+	 * Quiet a -Wmaybe-uninitialized warning by ensuring a variable is
+	   always initialised, because the compiler can't always determine this
+	   is safe (RT139356)
+	 * Avoid SIGFPE in product(-1, ...) (RT139601)
+
 1.59 -- 2021-09-12
 	[CHANGES]
 	 * Removed Scalar::Util::isbool() as the API design for older perls

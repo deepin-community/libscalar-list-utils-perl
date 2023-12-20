@@ -406,7 +406,7 @@ CODE:
                     IV i = SvIV(sv);
                     if (retiv == 0) /* avoid later division by zero */
                         break;
-                    if (retiv < 0) {
+                    if (retiv < -1) { /* avoid -1 because that causes SIGFPE */
                         if (i < 0) {
                             if (i >= IV_MAX / retiv) {
                                 retiv *= i;
@@ -420,7 +420,7 @@ CODE:
                             }
                         }
                     }
-                    else {
+                    else if (retiv > 0) {
                         if (i < 0) {
                             if (i >= IV_MIN / retiv) {
                                 retiv *= i;
@@ -548,7 +548,7 @@ CODE:
 {
     SV *ret = sv_newmortal();
     int index;
-    AV *retvals;
+    AV *retvals = NULL;
     GV *agv,*bgv;
     SV **args = &PL_stack_base[ax];
     CV *cv    = sv_to_cv(block, ix ? "reductions" : "reduce");
@@ -800,12 +800,12 @@ PPCODE:
         }
     }
 
-    if ( end < start ) {
+    if ( end <= start ) {
         XSRETURN(0);
     }
     else {
         EXTEND( SP, end - start );
-        for ( i = start; i <= end; i++ ) {
+        for ( i = start; i < end; i++ ) {
             PUSHs( sv_2mortal( newSVsv( ST(i) ) ) );
         }
         XSRETURN( end - start );
@@ -1584,10 +1584,10 @@ ALIAS:
     mesh_longest  = ZIP_MESH_LONGEST
     mesh_shortest = ZIP_MESH_SHORTEST
 PPCODE:
-    UV nlists = items; /* number of lists */
-    AV **lists;        /* inbound lists */
-    UV len = 0;        /* length of longest inbound list = length of result */
-    UV i;
+    Size_t nlists = items; /* number of lists */
+    AV **lists;         /* inbound lists */
+    Size_t len = 0;        /* length of longest inbound list = length of result */
+    Size_t i;
     bool is_mesh = (ix & ZIP_MESH);
     ix &= ~ZIP_MESH;
 
@@ -1628,12 +1628,12 @@ PPCODE:
     }
 
     if(is_mesh) {
-        UV retcount = len * nlists;
+        SSize_t retcount = (SSize_t)(len * nlists);
 
         EXTEND(SP, retcount);
 
         for(i = 0; i < len; i++) {
-            UV listi;
+            Size_t listi;
 
             for(listi = 0; listi < nlists; listi++) {
                 SV *item = (i < av_count(lists[listi])) ?
@@ -1647,10 +1647,10 @@ PPCODE:
         XSRETURN(retcount);
     }
     else {
-        EXTEND(SP, len);
+        EXTEND(SP, (SSize_t)len);
 
         for(i = 0; i < len; i++) {
-            UV listi;
+            Size_t listi;
             AV *ret = newAV();
             av_extend(ret, nlists);
 
